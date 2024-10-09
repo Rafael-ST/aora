@@ -6,8 +6,9 @@ import FormField from '../../components/FormField'
 import CustomBottom from '../../components/CustomBottom'
 import { Link } from 'expo-router'
 
-const signIn = () => {
+const SignUp = () => {
   const [form, setform] = useState({
+    userName: '',
     email: '',
     password: ''
   })
@@ -26,8 +27,16 @@ const signIn = () => {
             resizeMode='contain'
             className='w-[115px] h-[35px]'
           />
-          <Text className='text-2xl text-white text-semibold mt-10 font-psemibold'>Log in to Aora</Text>
+          <Text className='text-2xl text-white text-semibold mt-10 font-psemibold'>Sign up to Aora</Text>
 
+          <FormField
+            title='UserName'
+            value={form.userName}
+            handleChangeText={(e) => setform({ ...form,
+              userName: e
+            })}
+            otherStyles='mt-10'
+          />
           <FormField
             title='Email'
             value={form.email}
@@ -53,9 +62,9 @@ const signIn = () => {
           />
           <View className='justify-center pt-5 flex-row gap-2'>
             <Text className='text-lg text-gray-100 text-pregular'>
-              Don't have account?
+              Have account already?
             </Text>
-            <Link href='/sign-up' className='text-lg font-psemibold text-secondary'>Sign Up</Link>
+            <Link href='/sign-in' className='text-lg font-psemibold text-secondary'>Sign in</Link>
           </View>
         </View>
       </ScrollView>
@@ -63,4 +72,4 @@ const signIn = () => {
   )
 }
 
-export default signIn
+export default SignUp
