@@ -1,23 +1,40 @@
-import { ScrollView, Text, View, Image } from 'react-native'
+import { ScrollView, Text, View, Image, Alert } from 'react-native'
 import React, {useState} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {images} from '../../constants'
 import FormField from '../../components/FormField'
 import CustomBottom from '../../components/CustomBottom'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
+import { createUser } from '../../lib/appwrite'
 
 const SignUp = () => {
+  const { setUser, setIsLogged } = useGlobalContext();
+
+  const [isSubmitting, setSubmitting] = useState(false);
   const [form, setform] = useState({
-    userName: '',
-    email: '',
-    password: ''
+    username: "",
+    email: "",
+    password: "",
   })
 
-  const [isSubmitting, setisSubmitting] = useState(false)
+  const submit = async () => {
+    if (form.username === "" || form.email === "" || form.password === "") {
+      Alert.alert("Error", "Please fill in all fields");
+    }
 
-  const submit = () => {
+    setSubmitting(true);
+    try {
+      const result = await createUser(form.email, form.password, form.username);
+      setUser(result);
+      setIsLogged(true);
 
-  }
+      router.replace("/home");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
   return (
     <SafeAreaView className='bg-primary h-full'>
       <ScrollView>
@@ -55,7 +72,7 @@ const SignUp = () => {
             otherStyles='mt-7'
           />
           <CustomBottom
-            title='Sign In'
+            title='Sign Up'
             handlePress={submit}
             containerStyles='mt-7'
             isLoading={isSubmitting}
